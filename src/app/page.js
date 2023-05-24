@@ -1,16 +1,109 @@
 "use client";
 import Image from 'next/image'
 import 'bootstrap/dist/css/bootstrap.css'
+import { Modal } from 'react-bootstrap';
 
 // import styles from './page.module.css'
 // import { useClient } from 'react-jobs';
 import { useState } from 'react';
 
 
+// export default function Home() {
+//   const [showGif, setShowGif] = useState(null);
+//   const [displayChoice, setChoice] = useState(null);
+//   const [gifKey, setGifKey] = useState(0);
+
+//   function handleClick() {
+//     if (!displayChoice) {
+//       console.log("SELECT A COIN!")
+//       // User hasn't selected a coin button, do nothing
+//       return;
+//     }
+
+//     const result = testRandom();
+//     console.log(result);
+
+//     if (showGif === 'wizzy' && result === 'wizzy') {
+//       setShowGif('wizzy1');
+//     } else if (showGif === 'tomb' && result === 'tomb') {
+//       setShowGif('tomb1');
+//     } else {
+//       setShowGif(result);
+//     }
+//   }
+
+//   return (
+//     <div>
+//       <h1>Select a Coin and then click Flip!</h1>
+//       <button
+//         style={{
+//           border: 'none',
+//           backgroundColor: 'transparent',
+//           padding: 0,
+//           cursor: 'pointer',
+//         }}
+//         onClick={() => {
+//           setChoice('wizzy');
+//         }}
+//       >
+//         <div style={{ border: displayChoice === 'wizzy' ? '2px solid blue' : 'none' }}>
+//           <img
+//             style={{
+//               width: '50px',
+//               height: '50px',
+//               borderRadius: '50%',
+//               border: 'none',
+//             }}
+//             className="side-icon"
+//             src="/wizzy_coin.png"
+//             alt="Wizard"
+//           />
+//         </div>
+//       </button>
+//       <button
+//         style={{
+//           border: 'none',
+//           backgroundColor: 'transparent',
+//           padding: 0,
+//           cursor: 'pointer',
+//         }}
+//         onClick={() => {
+//           setChoice('tombstone');
+//         }}
+//       >
+//         <div style={{ border: displayChoice === 'tombstone' ? '2px solid blue' : 'none' }}>
+//           <img
+//             style={{
+//               width: '50px',
+//               height: '50px',
+//               borderRadius: '50%',
+//               border: 'none',
+//             }}
+//             className="side-icon"
+//             src="/wizzy_coin.png"
+//             alt="Wizard"
+//           />
+//         </div>
+//       </button>
+
+//       {showGif === 'wizzy' && <img key={gifKey} src="wizzyWinOnce.gif" alt="gif1" />}
+//       {showGif === 'tomb' && <img key={gifKey} src="tombstoneWinOnce.gif" alt="gif2" />}
+//       {showGif === 'wizzy1' && <img key={gifKey} src="wizzyWinOnce1.gif" alt="gif1" />}
+//       {showGif === 'tomb1' && <img key={gifKey} src="tombstoneWinOnce1.gif" alt="gif2" />}
+
+//       <button type="button" class="btn btn-secondary" onClick={handleClick}>
+//         FLIP!
+//       </button>
+//       <h1>Selected Coin: {displayChoice}</h1>
+//     </div>
+//   );
+// }
+
 export default function Home() {
   const [showGif, setShowGif] = useState(null);
   const [displayChoice, setChoice] = useState(null);
   const [gifKey, setGifKey] = useState(0);
+  const [modalShow, setModalShow] = useState(false); // State for controlling the modal visibility
 
   function handleClick() {
     if (!displayChoice) {
@@ -29,6 +122,8 @@ export default function Home() {
     } else {
       setShowGif(result);
     }
+
+    setModalShow(true); // Show the modal when the GIF result is available
   }
 
   return (
@@ -42,10 +137,10 @@ export default function Home() {
           cursor: 'pointer',
         }}
         onClick={() => {
-          setChoice('wizzy');
+          setChoice('Wizzy');
         }}
       >
-        <div style={{ border: displayChoice === 'wizzy' ? '2px solid blue' : 'none' }}>
+        <div style={{ border: displayChoice === 'Wizzy' ? '2px solid blue' : 'none' }}>
           <img
             style={{
               width: '50px',
@@ -67,10 +162,10 @@ export default function Home() {
           cursor: 'pointer',
         }}
         onClick={() => {
-          setChoice('tombstone');
+          setChoice('Tombstone');
         }}
       >
-        <div style={{ border: displayChoice === 'tombstone' ? '2px solid blue' : 'none' }}>
+        <div style={{ border: displayChoice === 'Tombstone' ? '2px solid blue' : 'none' }}>
           <img
             style={{
               width: '50px',
@@ -85,15 +180,22 @@ export default function Home() {
         </div>
       </button>
 
-      {showGif === 'wizzy' && <img key={gifKey} src="wizzyWinOnce.gif" alt="gif1" />}
-      {showGif === 'tomb' && <img key={gifKey} src="tombstoneWinOnce.gif" alt="gif2" />}
-      {showGif === 'wizzy1' && <img key={gifKey} src="wizzyWinOnce1.gif" alt="gif1" />}
-      {showGif === 'tomb1' && <img key={gifKey} src="tombstoneWinOnce1.gif" alt="gif2" />}
-
       <button type="button" class="btn btn-secondary" onClick={handleClick}>
         FLIP!
       </button>
       <h1>Selected Coin: {displayChoice}</h1>
+
+      <Modal show={modalShow} onHide={() => setModalShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Selected Coin: {displayChoice}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {showGif === 'wizzy' && <img key={gifKey} src="wizzyWinOnce.gif" alt="gif1" />}
+          {showGif === 'tomb' && <img key={gifKey} src="tombstoneWinOnce.gif" alt="gif2" />}
+          {showGif === 'wizzy1' && <img key={gifKey} src="wizzyWinOnce1.gif" alt="gif1" />}
+          {showGif === 'tomb1' && <img key={gifKey} src="tombstoneWinOnce1.gif" alt="gif2" />}
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }
