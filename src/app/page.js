@@ -8,11 +8,21 @@ import { useState } from 'react';
 export default function Home() {
   const [showGif, setShowGif] = useState(null);
   const [displayChoice, setChoice] = useState(null);
+  const [gifKey, setGifKey] = useState(0); // Add state variable for the key
+  const [wizzyKey, setWizzyKey] = useState(0);
+  const [tombKey, setTombKey] = useState(0);
   // const client = useClient();   
   function handleClick(){
-    const result = testRandom()
+    let result = testRandom()
     console.log(result)
-    setShowGif(result);
+    if (showGif === 'wizzy' && result == 'wizzy') {
+      setShowGif('wizzy1')
+    } else if (showGif === 'tomb' && result == 'tomb') {
+      setShowGif('tomb1')
+    }
+    else{
+      setShowGif(result);
+    }
   }
   return (
     <div>
@@ -56,6 +66,7 @@ export default function Home() {
       >
         <div style={{ border: displayChoice === 'tombstone' ? '2px solid blue' : 'none' }}>
           <img
+            
             style={{
               width: '50px',
               height: '50px',
@@ -71,10 +82,16 @@ export default function Home() {
 
       
       {showGif === 'wizzy' && (
-        <img src="wizzyWinOnce.gif" alt="gif1" />
+        <img key={gifKey} src="wizzyWinOnce.gif" alt="gif1" />
       )}
       {showGif === 'tomb' && (
-        <img src="tombstoneWinOnce.gif" alt="gif2" />
+        <img key={gifKey} src="tombstoneWinOnce.gif" alt="gif2" />
+      )}
+      {showGif === 'wizzy1' && (
+        <img key={gifKey} src="wizzyWinOnce1.gif" alt="gif1" />
+      )}
+      {showGif === 'tomb1' && (
+        <img key={gifKey} src="tombstoneWinOnce1.gif" alt="gif2" />
       )}
       <button type="button" class="btn btn-secondary"onClick ={testRandom}>RANDOM!</button>
       <button type="button" class="btn btn-secondary" onClick={handleClick}>FLIP!</button>
