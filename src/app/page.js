@@ -5,27 +5,34 @@ import 'bootstrap/dist/css/bootstrap.css'
 // import styles from './page.module.css'
 // import { useClient } from 'react-jobs';
 import { useState } from 'react';
+
+
 export default function Home() {
   const [showGif, setShowGif] = useState(null);
   const [displayChoice, setChoice] = useState(null);
-  const [gifKey, setGifKey] = useState(0); // Add state variable for the key
+  const [gifKey, setGifKey] = useState(0);
 
-  // const client = useClient();   
-  function handleClick(){
-    let result = testRandom()
-    console.log(result)
-    if (showGif === 'wizzy' && result == 'wizzy') {
-      setShowGif('wizzy1')
-    } else if (showGif === 'tomb' && result == 'tomb') {
-      setShowGif('tomb1')
+  function handleClick() {
+    if (!displayChoice) {
+      console.log("SELECT A COIN!")
+      // User hasn't selected a coin button, do nothing
+      return;
     }
-    else{
+
+    const result = testRandom();
+    console.log(result);
+
+    if (showGif === 'wizzy' && result === 'wizzy') {
+      setShowGif('wizzy1');
+    } else if (showGif === 'tomb' && result === 'tomb') {
+      setShowGif('tomb1');
+    } else {
       setShowGif(result);
     }
   }
+
   return (
     <div>
-      
       <h1>Home Page</h1>
       <button
         style={{
@@ -35,7 +42,7 @@ export default function Home() {
           cursor: 'pointer',
         }}
         onClick={() => {
-            setChoice('wizzy')
+          setChoice('wizzy');
         }}
       >
         <div style={{ border: displayChoice === 'wizzy' ? '2px solid blue' : 'none' }}>
@@ -60,12 +67,11 @@ export default function Home() {
           cursor: 'pointer',
         }}
         onClick={() => {
-            setChoice("tombstone")
+          setChoice('tombstone');
         }}
       >
         <div style={{ border: displayChoice === 'tombstone' ? '2px solid blue' : 'none' }}>
           <img
-            
             style={{
               width: '50px',
               height: '50px',
@@ -79,21 +85,14 @@ export default function Home() {
         </div>
       </button>
 
-      
-      {showGif === 'wizzy' && (
-        <img key={gifKey} src="wizzyWinOnce.gif" alt="gif1" />
-      )}
-      {showGif === 'tomb' && (
-        <img key={gifKey} src="tombstoneWinOnce.gif" alt="gif2" />
-      )}
-      {showGif === 'wizzy1' && (
-        <img key={gifKey} src="wizzyWinOnce1.gif" alt="gif1" />
-      )}
-      {showGif === 'tomb1' && (
-        <img key={gifKey} src="tombstoneWinOnce1.gif" alt="gif2" />
-      )}
-      <button type="button" class="btn btn-secondary"onClick ={testRandom}>RANDOM!</button>
-      <button type="button" class="btn btn-secondary" onClick={handleClick}>FLIP!</button>
+      {showGif === 'wizzy' && <img key={gifKey} src="wizzyWinOnce.gif" alt="gif1" />}
+      {showGif === 'tomb' && <img key={gifKey} src="tombstoneWinOnce.gif" alt="gif2" />}
+      {showGif === 'wizzy1' && <img key={gifKey} src="wizzyWinOnce1.gif" alt="gif1" />}
+      {showGif === 'tomb1' && <img key={gifKey} src="tombstoneWinOnce1.gif" alt="gif2" />}
+
+      <button type="button" class="btn btn-secondary" onClick={handleClick}>
+        FLIP!
+      </button>
       <h1>Selected Coin: {displayChoice}</h1>
     </div>
   );
