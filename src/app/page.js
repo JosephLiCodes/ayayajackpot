@@ -9,8 +9,7 @@ export default function Home() {
   const [showGif, setShowGif] = useState(null);
   const [displayChoice, setChoice] = useState(null);
   const [gifKey, setGifKey] = useState(0); // Add state variable for the key
-  const [wizzyKey, setWizzyKey] = useState(0);
-  const [tombKey, setTombKey] = useState(0);
+
   // const client = useClient();   
   function handleClick(){
     let result = testRandom()
