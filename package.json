@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "crypto": "^1.0.1",
+    "firebase": "^9.22.0",
     "next": "13.4.0",
     "random": "^4.1.0",
     "react": "18.2.0",
