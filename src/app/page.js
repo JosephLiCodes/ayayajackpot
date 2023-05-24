@@ -33,7 +33,7 @@ export default function Home() {
 
   return (
     <div>
-      <h1>Home Page</h1>
+      <h1>Select a Coin and then click Flip!</h1>
       <button
         style={{
           border: 'none',
