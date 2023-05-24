@@ -1,28 +1,84 @@
 "use client";
 import Image from 'next/image'
+import 'bootstrap/dist/css/bootstrap.css'
+
 // import styles from './page.module.css'
 // import { useClient } from 'react-jobs';
 import { useState } from 'react';
 export default function Home() {
   const [showGif, setShowGif] = useState(null);
+  const [displayChoice, setChoice] = useState(null);
   // const client = useClient();   
   function handleClick(){
     const result = testRandom()
     console.log(result)
     setShowGif(result);
   }
-
   return (
     <div>
+      
       <h1>Home Page</h1>
-      <button onClick ={testRandom}>RANDOM!</button>
-      <button onClick={handleClick}>Click me</button>
+      <button
+        style={{
+          border: 'none',
+          backgroundColor: 'transparent',
+          padding: 0,
+          cursor: 'pointer',
+        }}
+        onClick={() => {
+            setChoice('wizzy')
+        }}
+      >
+        <div style={{ border: displayChoice === 'wizzy' ? '2px solid blue' : 'none' }}>
+          <img
+            style={{
+              width: '50px',
+              height: '50px',
+              borderRadius: '50%',
+              border: 'none',
+            }}
+            className="side-icon"
+            src="/wizzy_coin.png"
+            alt="Wizard"
+          />
+        </div>
+      </button>
+      <button
+        style={{
+          border: 'none',
+          backgroundColor: 'transparent',
+          padding: 0,
+          cursor: 'pointer',
+        }}
+        onClick={() => {
+            setChoice("tombstone")
+        }}
+      >
+        <div style={{ border: displayChoice === 'tombstone' ? '2px solid blue' : 'none' }}>
+          <img
+            style={{
+              width: '50px',
+              height: '50px',
+              borderRadius: '50%',
+              border: 'none',
+            }}
+            className="side-icon"
+            src="/wizzy_coin.png"
+            alt="Wizard"
+          />
+        </div>
+      </button>
+
+      
       {showGif === 'wizzy' && (
-        <img src="wizzyWin.gif" alt="gif1" />
+        <img src="wizzyWinOnce.gif" alt="gif1" />
       )}
       {showGif === 'tomb' && (
-        <img src="tombstoneWin.gif" alt="gif2" />
+        <img src="tombstoneWinOnce.gif" alt="gif2" />
       )}
+      <button type="button" class="btn btn-secondary"onClick ={testRandom}>RANDOM!</button>
+      <button type="button" class="btn btn-secondary" onClick={handleClick}>FLIP!</button>
+      <h1>Selected Coin: {displayChoice}</h1>
     </div>
   );
 }
