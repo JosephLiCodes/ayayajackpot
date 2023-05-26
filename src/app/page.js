@@ -3,7 +3,15 @@ import Image from 'next/image'
 import 'bootstrap/dist/css/bootstrap.css'
 import { Modal } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
-
+function clearQ(){
+  const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+  if (alertPlaceholder != null) {
+    const lastAlert = alertPlaceholder.lastChild;
+    if (lastAlert != null) {
+      alertPlaceholder.removeChild(lastAlert);
+    }
+  }
+};
 export default function Home() {
   const [showGif, setShowGif] = useState(null);
   const [displayChoice, setChoice] = useState(null);
@@ -13,17 +21,51 @@ export default function Home() {
   const [itemQuantities, setItemQuantities] = useState([1, 1]); // Initial quantities for each item
   const [selectedIndexes, setSelectedIndexes] = useState([]);
   let imageLinks = ["/pixie_sword.png", "/deca_ring.png"]
-  function test(items){
-    console.log(items[0])
-  }
+  const appendAlert = (message, type) => {
+    const clearQ = () => {
+      const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+      console.log("clearing")
+      if (alertPlaceholder != null) {
+        const lastAlert = alertPlaceholder.lastChild;
+        if (lastAlert != null) {
+          alertPlaceholder.removeChild(lastAlert);
+        }
+      }
+    };
+  
+    const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+  
+    if (alertPlaceholder != null) {
+      const alertElement = document.createElement('div');
+      alertElement.className = `alert-dismissible alert alert-${type} fade show`;
+      alertElement.setAttribute('role', 'alert');
+    
+      const alertMessage = document.createElement('div');
+      alertMessage.innerText = message;
+    
+      const closeButton = document.createElement('button');
+      closeButton.type = 'button';
+      closeButton.className = 'btn-close';
+      closeButton.addEventListener('click', clearQ);
+      closeButton.setAttribute('data-bs-dismiss', 'alert');
+      closeButton.setAttribute('aria-label', 'Close');
+    
+      alertElement.appendChild(alertMessage);
+      alertElement.appendChild(closeButton);
+    
+      alertPlaceholder.appendChild(alertElement);
+    }
+  };
+  
+  
   function updateItems(result, updatedItemQuantities){
-    console.log("debug: " + itemQuantities[0] + "pt 2: " + itemQuantities[1])
+    // console.log("debug: " + itemQuantities[0] + "pt 2: " + itemQuantities[1])
     if(result === "wizzy" && displayChoice === "Wizzy" || result === "tomb" && displayChoice === "Tombstone"){
       setItemCount(prevItemCount => {
         const updatedItemCount = [...prevItemCount]; // Create a copy of the original array
         for(let index = 0; index<itemCount.length; index++){
           if (index >= 0 && index < updatedItemCount.length) {
-            console.log("index: " + index + "amt " + itemCount[index])
+            // console.log("index: " + index + "amt " + itemCount[index])
             updatedItemCount[index] += updatedItemQuantities[index]; // add winnings!
           }
         }
@@ -48,7 +90,7 @@ export default function Home() {
         // });
         for(let index = 0; index<itemCount.length; index++){
           if (index >= 0 && index < updatedItemCount.length) {
-            console.log("index: " + index + "amt " + itemCount[index])
+            // console.log("index: " + index + "amt " + itemCount[index])
             updatedItemCount[index] -= updatedItemQuantities[index]; // add winnings!
           }
         }
@@ -59,9 +101,10 @@ export default function Home() {
   }
   function handleClick() {
     // setItemQuantities([2,3])
-    console.log("bet amt" + itemQuantities[0] + itemQuantities[1])
+    // console.log("bet amt" + itemQuantities[0] + itemQuantities[1])
     if (!displayChoice) {
       console.log("SELECT A COIN!")
+      appendAlert('SELECT A COIN!', 'danger')
       // User hasn't selected a coin button, do nothing
       return;
     }
@@ -69,16 +112,17 @@ export default function Home() {
     const inputBoxes = document.querySelectorAll('input[type="number"]');
     for (let i = 0; i<inputBoxes.length; i++){
       const quantity = parseInt(inputBoxes[i].value) || 0;
-      console.log("Quantity:" + quantity)
+      // console.log("Quantity:" + quantity)
       if(quantity < 0 || quantity > itemCount[i]){
         console.log("invalid gambling values!")
+        appendAlert('Invalid Gambling Values!', 'danger')
         return;
       }
       updatedItemQuantities[i] = quantity;
     }
     setItemQuantities(updatedItemQuantities)
     const result = testRandom();
-    console.log(result);
+    // console.log(result);
     updateItems(result, updatedItemQuantities)
     if (showGif === 'wizzy' && result === 'wizzy') {
       setShowGif('wizzy1');
@@ -203,11 +247,14 @@ export default function Home() {
           />
         </div>
       </button>
+      
 
       <button type="button" class="btn btn-secondary" onClick={handleClick}>
         FLIP!
       </button>
-      
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+      <div id="liveAlertPlaceholder" style={{ position: 'absolute', bottom: '0' }}></div>
     </div>
     <div style={{ width: '50%' }}>
           <h1>Selected Coin: {displayChoice}</h1>
@@ -217,6 +264,7 @@ export default function Home() {
           {showGif === 'tomb1' && <img key={gifKey} src="tombstoneWinOnce1.gif" alt="gif2" />}
     </div>
     </div>
+    
     
       {/* <Modal show={modalShow} onHide={() => {setModalShow(false)}}>
         <Modal.Header closeButton>
@@ -229,7 +277,9 @@ export default function Home() {
           {showGif === 'tomb1' && <img key={gifKey} src="tombstoneWinOnce1.gif" alt="gif2" />}
         </Modal.Body>
       </Modal> */}
+      
     </div>
+    
   );
 }
 
