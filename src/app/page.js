@@ -19,8 +19,8 @@ export default function Home() {
         const updatedItemCount = [...prevItemCount]; // Create a copy of the original array
         for(let index = 0; index<itemCount.length; index++){
           if (index >= 0 && index < updatedItemCount.length) {
-            console.log("index: " + index + "amt " + itemQuantities[index])
-            updatedItemCount[index] += itemQuantities[index]; // add winnings!
+            console.log("index: " + index + "amt " + itemCount[index])
+            updatedItemCount[index] += itemCount[index]; // add winnings!
           }
         }
         // itemQuantities.forEach(index => {
@@ -44,8 +44,8 @@ export default function Home() {
         // });
         for(let index = 0; index<itemCount.length; index++){
           if (index >= 0 && index < updatedItemCount.length) {
-            console.log("index: " + index + "amt " + itemQuantities[index])
-            updatedItemCount[index] -= itemQuantities[index]; // add winnings!
+            console.log("index: " + index + "amt " + itemCount[index])
+            updatedItemCount[index] -= itemCount[index]; // add winnings!
           }
         }
         return updatedItemCount; // Return the updated array
@@ -151,7 +151,7 @@ export default function Home() {
           </div>
           <input
             type="number"
-            value="1"
+            defaultValue="1"
             className={`inputBox${index + 1}`}
             data-index={index}
           />
