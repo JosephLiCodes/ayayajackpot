@@ -10,41 +10,83 @@ export default function Home() {
   const [gifKey, setGifKey] = useState(0);
   const [modalShow, setModalShow] = useState(false); // State for controlling the modal visibility
   const [itemCount, setItemCount] = useState([1, 2]);
+  const [itemQuantities, setItemQuantities] = useState([1, 1]); // Initial quantities for each item
   const [selectedIndexes, setSelectedIndexes] = useState([]);
   let imageLinks = ["/pixie_sword.png", "/deca_ring.png"]
   function updateItems(result){
     if(result === "wizzy" && displayChoice === "Wizzy" || result === "tomb" && displayChoice === "Tombstone"){
       setItemCount(prevItemCount => {
         const updatedItemCount = [...prevItemCount]; // Create a copy of the original array
-        selectedIndexes.forEach(index => {
+        for(let index = 0; index<itemCount.length; index++){
           if (index >= 0 && index < updatedItemCount.length) {
-            updatedItemCount[index] *= 2; // Double the value at the specified index
+            console.log("index: " + index + "amt " + itemQuantities[index])
+            updatedItemCount[index] += itemQuantities[index]; // add winnings!
           }
-        });
+        }
+        // itemQuantities.forEach(index => {
+        //   console.log(itemQuantities[index])
+        //   if (index >= 0 && index < updatedItemCount.length) {
+        //     console.log("index: " + index + "amt " + itemQuantities[index])
+        //     updatedItemCount[index] += itemQuantities[index]; // add winnings!
+        //   }
+        // });
         return updatedItemCount; // Return the updated array
       });    
     }
     else{
       setItemCount(prevItemCount => {
         const updatedItemCount = [...prevItemCount]; // Create a copy of the original array
-        selectedIndexes.forEach(index => {
+        // itemQuantities.forEach(index => {
+        //   if (index >= 0 && index < updatedItemCount.length) {
+        //     console.log("index: " + index + "amt " + itemQuantities[index])
+        //     updatedItemCount[index] -= itemQuantities[index]; // add winnings!
+        //   }
+        // });
+        for(let index = 0; index<itemCount.length; index++){
           if (index >= 0 && index < updatedItemCount.length) {
-            updatedItemCount[index] = 0; // Double the value at the specified index
+            console.log("index: " + index + "amt " + itemQuantities[index])
+            updatedItemCount[index] -= itemQuantities[index]; // add winnings!
           }
-        });
+        }
         return updatedItemCount; // Return the updated array
-      });
+      });    
     
     }
   }
   function handleClick() {
-
+    // setItemQuantities([2,3])
+    console.log("bet amt" + itemQuantities[0] + itemQuantities[1])
     if (!displayChoice) {
       console.log("SELECT A COIN!")
       // User hasn't selected a coin button, do nothing
       return;
     }
-
+    const updatedItemQuantities = [];
+    console.log()
+    // for (let i = 0; i < itemCount.length; i++) {
+    //   const inputBox = document.getElementsByClassName(`inputBox${i + 1}`);
+    //   const quantity = parseInt(inputBox.value, 10) || 0;
+    //   console.log("Quanittity:" + quantity)
+    //   console.log("HERE" + quantity)
+    //   if(quantity < 0 || quantity > itemCount[i]){
+    //     console.log("invalid gambling values!")
+    //     return;
+    //   }
+    //   updatedItemQuantities[i] = quantity;
+    // }
+    // setItemQuantities(updatedItemQuantities);
+    const inputBoxes = document.querySelectorAll('input[type="number"]');
+    for (let i = 0; i<inputBoxes.length; i++){
+      const quantity = parseInt(inputBoxes[i].value) || 0;
+      console.log("Quanittity:" + quantity)
+      console.log("HERE" + quantity)
+      if(quantity < 0 || quantity > itemCount[i]){
+        console.log("invalid gambling values!")
+        return;
+      }
+      updatedItemQuantities[i] = quantity;
+    }
+    console.log("item quantities: " + itemQuantities[0])
     const result = testRandom();
 
 
@@ -61,29 +103,20 @@ export default function Home() {
     setModalShow(true); // Show the modal when the GIF result is available
     updateItems(result)
   }
-    const itemSelected = (index) => {
-      if (selectedIndexes.includes(index)) {
-        setSelectedIndexes(selectedIndexes.filter((selectedIndex) => selectedIndex !== index));
-      } else {
-        setSelectedIndexes([...selectedIndexes, index]);
-      }
-    };
+    // const itemSelected = (index) => {
+    //   if (selectedIndexes.includes(index)) {
+    //     setSelectedIndexes(selectedIndexes.filter((selectedIndex) => selectedIndex !== index));
+    //   } else {
+    //     setSelectedIndexes([...selectedIndexes, index]);
+    //   }
+    // };
   return (
     <div>
       <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
       <a class="navbar-brand" href="#" style={{ display: 'flex', alignItems: 'center' }}>
+        <h1 class = "text-light">Inventory: </h1>
         {itemCount.map((number, index) => (
           <div key={index} style={{ display: 'flex', alignItems: 'center', margin: '10 30px' }}>
-            <h1 class="text-light">{number}</h1>
-            <button
-              style={{
-                border: selectedIndexes.includes(index) ? '2px solid blue' : 'none',
-                backgroundColor: 'transparent',
-                padding: 0,
-                cursor: 'pointer',
-              }}
-              onClick={() => itemSelected(index)}
-            >
               <div>
                 <img
                   style={{
@@ -96,12 +129,34 @@ export default function Home() {
                   alt={`Image ${index + 1}`}
                 />
               </div>
-            </button>
+              <h1 class="text-light">{number}</h1>
           </div>
         ))}
       </a>
     </nav>
-      
+    {itemCount.map((number, index) => (
+      <div key={index} style={{ display: 'flex', alignItems: 'center', margin: '10 30px' }}>
+        <h1 class="text-light">{number}</h1>
+          <div>
+            <img
+              style={{
+                width: '50px',
+                height: '50px',
+                border: 'none',
+              }}
+              className="side-icon"
+              src={imageLinks[index]}
+              alt={`Image ${index + 1}`}
+            />
+          </div>
+          <input
+            type="number"
+            value="1"
+            className={`inputBox${index + 1}`}
+            data-index={index}
+          />
+      </div>
+      ))}
       <h1>Select a Coin and then click Flip!</h1>
       <button
         style={{
