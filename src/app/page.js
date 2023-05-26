@@ -9,18 +9,19 @@ export default function Home() {
   const [displayChoice, setChoice] = useState(null);
   const [gifKey, setGifKey] = useState(0);
   const [modalShow, setModalShow] = useState(false); // State for controlling the modal visibility
-  const [itemCount, setItemCount] = useState([1, 2]);
+  const [itemCount, setItemCount] = useState([5, 7]);
   const [itemQuantities, setItemQuantities] = useState([1, 1]); // Initial quantities for each item
   const [selectedIndexes, setSelectedIndexes] = useState([]);
   let imageLinks = ["/pixie_sword.png", "/deca_ring.png"]
   function updateItems(result){
+    console.log("debug: " + itemQuantities[0] + "pt 2: " + itemQuantities[1])
     if(result === "wizzy" && displayChoice === "Wizzy" || result === "tomb" && displayChoice === "Tombstone"){
       setItemCount(prevItemCount => {
         const updatedItemCount = [...prevItemCount]; // Create a copy of the original array
         for(let index = 0; index<itemCount.length; index++){
           if (index >= 0 && index < updatedItemCount.length) {
             console.log("index: " + index + "amt " + itemCount[index])
-            updatedItemCount[index] += itemCount[index]; // add winnings!
+            updatedItemCount[index] += itemQuantities[index]; // add winnings!
           }
         }
         // itemQuantities.forEach(index => {
@@ -45,7 +46,7 @@ export default function Home() {
         for(let index = 0; index<itemCount.length; index++){
           if (index >= 0 && index < updatedItemCount.length) {
             console.log("index: " + index + "amt " + itemCount[index])
-            updatedItemCount[index] -= itemCount[index]; // add winnings!
+            updatedItemCount[index] -= itemQuantities[index]; // add winnings!
           }
         }
         return updatedItemCount; // Return the updated array
@@ -62,19 +63,6 @@ export default function Home() {
       return;
     }
     const updatedItemQuantities = [];
-    console.log()
-    // for (let i = 0; i < itemCount.length; i++) {
-    //   const inputBox = document.getElementsByClassName(`inputBox${i + 1}`);
-    //   const quantity = parseInt(inputBox.value, 10) || 0;
-    //   console.log("Quanittity:" + quantity)
-    //   console.log("HERE" + quantity)
-    //   if(quantity < 0 || quantity > itemCount[i]){
-    //     console.log("invalid gambling values!")
-    //     return;
-    //   }
-    //   updatedItemQuantities[i] = quantity;
-    // }
-    // setItemQuantities(updatedItemQuantities);
     const inputBoxes = document.querySelectorAll('input[type="number"]');
     for (let i = 0; i<inputBoxes.length; i++){
       const quantity = parseInt(inputBoxes[i].value) || 0;
@@ -86,12 +74,11 @@ export default function Home() {
       }
       updatedItemQuantities[i] = quantity;
     }
+    setItemQuantities(updatedItemQuantities)
     console.log("item quantities: " + itemQuantities[0])
     const result = testRandom();
-
-
     console.log(result);
-
+    updateItems(result)
     if (showGif === 'wizzy' && result === 'wizzy') {
       setShowGif('wizzy1');
     } else if (showGif === 'tomb' && result === 'tomb') {
@@ -101,7 +88,7 @@ export default function Home() {
     }
 
     setModalShow(true); // Show the modal when the GIF result is available
-    updateItems(result)
+  
   }
     // const itemSelected = (index) => {
     //   if (selectedIndexes.includes(index)) {
@@ -112,31 +99,34 @@ export default function Home() {
     // };
   return (
     <div>
-      <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+      <nav class="navbar navbar-expand-lg" style ={{backgroundColor: "#A9BCD0"}} >
+        <h1 style = {{color: "#58a4b0"}}>Welcome to AYAYAJACKPOT!</h1>
       <a class="navbar-brand" href="#" style={{ display: 'flex', alignItems: 'center' }}>
-        <h1 class = "text-light">Inventory: </h1>
-        {itemCount.map((number, index) => (
-          <div key={index} style={{ display: 'flex', alignItems: 'center', margin: '10 30px' }}>
-              <div>
-                <img
-                  style={{
-                    width: '50px',
-                    height: '50px',
-                    border: 'none',
-                  }}
-                  className="side-icon"
-                  src={imageLinks[index]}
-                  alt={`Image ${index + 1}`}
-                />
-              </div>
-              <h1 class="text-light">{number}</h1>
-          </div>
-        ))}
+        
       </a>
     </nav>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <h1 class>Inventory: </h1>
+          {itemCount.map((number, index) => (
+            <div key={index} style={{ display: 'flex', alignItems: 'center', margin: '10 30px' }}>
+                <div>
+                  <img
+                    style={{
+                      width: '50px',
+                      height: '50px',
+                      border: 'none',
+                    }}
+                    className="side-icon"
+                    src={imageLinks[index]}
+                    alt={`Image ${index + 1}`}
+                  />
+                </div>
+                <h1 >{number}</h1>
+            </div>
+          ))}
+    </div>
     {itemCount.map((number, index) => (
       <div key={index} style={{ display: 'flex', alignItems: 'center', margin: '10 30px' }}>
-        <h1 class="text-light">{number}</h1>
           <div>
             <img
               style={{
