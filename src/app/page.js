@@ -2,18 +2,21 @@
 import Image from 'next/image'
 import 'bootstrap/dist/css/bootstrap.css'
 import { Modal } from 'react-bootstrap';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
   const [showGif, setShowGif] = useState(null);
   const [displayChoice, setChoice] = useState(null);
   const [gifKey, setGifKey] = useState(0);
   const [modalShow, setModalShow] = useState(false); // State for controlling the modal visibility
-  const [itemCount, setItemCount] = useState([5, 7]);
+  const [itemCount, setItemCount] = useState([15, 17]);
   const [itemQuantities, setItemQuantities] = useState([1, 1]); // Initial quantities for each item
   const [selectedIndexes, setSelectedIndexes] = useState([]);
   let imageLinks = ["/pixie_sword.png", "/deca_ring.png"]
-  function updateItems(result){
+  function test(items){
+    console.log(items[0])
+  }
+  function updateItems(result, updatedItemQuantities){
     console.log("debug: " + itemQuantities[0] + "pt 2: " + itemQuantities[1])
     if(result === "wizzy" && displayChoice === "Wizzy" || result === "tomb" && displayChoice === "Tombstone"){
       setItemCount(prevItemCount => {
@@ -21,7 +24,7 @@ export default function Home() {
         for(let index = 0; index<itemCount.length; index++){
           if (index >= 0 && index < updatedItemCount.length) {
             console.log("index: " + index + "amt " + itemCount[index])
-            updatedItemCount[index] += itemQuantities[index]; // add winnings!
+            updatedItemCount[index] += updatedItemQuantities[index]; // add winnings!
           }
         }
         // itemQuantities.forEach(index => {
@@ -46,7 +49,7 @@ export default function Home() {
         for(let index = 0; index<itemCount.length; index++){
           if (index >= 0 && index < updatedItemCount.length) {
             console.log("index: " + index + "amt " + itemCount[index])
-            updatedItemCount[index] -= itemQuantities[index]; // add winnings!
+            updatedItemCount[index] -= updatedItemQuantities[index]; // add winnings!
           }
         }
         return updatedItemCount; // Return the updated array
@@ -66,8 +69,7 @@ export default function Home() {
     const inputBoxes = document.querySelectorAll('input[type="number"]');
     for (let i = 0; i<inputBoxes.length; i++){
       const quantity = parseInt(inputBoxes[i].value) || 0;
-      console.log("Quanittity:" + quantity)
-      console.log("HERE" + quantity)
+      console.log("Quantity:" + quantity)
       if(quantity < 0 || quantity > itemCount[i]){
         console.log("invalid gambling values!")
         return;
@@ -75,10 +77,9 @@ export default function Home() {
       updatedItemQuantities[i] = quantity;
     }
     setItemQuantities(updatedItemQuantities)
-    console.log("item quantities: " + itemQuantities[0])
     const result = testRandom();
     console.log(result);
-    updateItems(result)
+    updateItems(result, updatedItemQuantities)
     if (showGif === 'wizzy' && result === 'wizzy') {
       setShowGif('wizzy1');
     } else if (showGif === 'tomb' && result === 'tomb') {
@@ -87,7 +88,7 @@ export default function Home() {
       setShowGif(result);
     }
 
-    setModalShow(true); // Show the modal when the GIF result is available
+    // setModalShow(true); // Show the modal when the GIF result is available
   
   }
     // const itemSelected = (index) => {
@@ -99,12 +100,14 @@ export default function Home() {
     // };
   return (
     <div>
-      <nav class="navbar navbar-expand-lg" style ={{backgroundColor: "#A9BCD0"}} >
+      <nav class="navbar navbar-expand-lg"  style ={{height: '10vh', backgroundColor: "#A9BCD0"}} >
         <h1 style = {{color: "#58a4b0"}}>Welcome to AYAYAJACKPOT!</h1>
       <a class="navbar-brand" href="#" style={{ display: 'flex', alignItems: 'center' }}>
         
       </a>
     </nav>
+    <div style={{ display: 'flex', height: '90vh' }}>
+    <div style={{ width: '50%', borderRight: '1px solid black' }}>
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <h1 class>Inventory: </h1>
           {itemCount.map((number, index) => (
@@ -125,6 +128,7 @@ export default function Home() {
             </div>
           ))}
     </div>
+    {/* <h3>Choose how much of each item, then select a coin side and then click Flip!</h3> */}
     {itemCount.map((number, index) => (
       <div key={index} style={{ display: 'flex', alignItems: 'center', margin: '10 30px' }}>
           <div>
@@ -147,7 +151,8 @@ export default function Home() {
           />
       </div>
       ))}
-      <h1>Select a Coin and then click Flip!</h1>
+      
+      <h3>Selected Coin: {displayChoice}</h3>
       <button
         style={{
           border: 'none',
@@ -162,8 +167,8 @@ export default function Home() {
         <div style={{ border: displayChoice === 'Wizzy' ? '2px solid blue' : 'none' }}>
           <img
             style={{
-              width: '50px',
-              height: '50px',
+              width: '100px',
+              height: '100px',
               borderRadius: '50%',
               border: 'none',
             }}
@@ -187,8 +192,8 @@ export default function Home() {
         <div style={{ border: displayChoice === 'Tombstone' ? '2px solid blue' : 'none' }}>
           <img
             style={{
-              width: '50px',
-              height: '50px',
+              width: '100px',
+              height: '100px',
               borderRadius: '50%',
               border: 'none',
             }}
@@ -202,9 +207,18 @@ export default function Home() {
       <button type="button" class="btn btn-secondary" onClick={handleClick}>
         FLIP!
       </button>
-      <h1>Selected Coin: {displayChoice}</h1>
-
-      <Modal show={modalShow} onHide={() => {setModalShow(false)}}>
+      
+    </div>
+    <div style={{ width: '50%' }}>
+          <h1>Selected Coin: {displayChoice}</h1>
+          {showGif === 'wizzy' && <img key={gifKey} src="wizzyWinOnce.gif" alt="gif1" />}
+          {showGif === 'tomb' && <img key={gifKey} src="tombstoneWinOnce.gif" alt="gif2" />}
+          {showGif === 'wizzy1' && <img key={gifKey} src="wizzyWinOnce1.gif" alt="gif1" />}
+          {showGif === 'tomb1' && <img key={gifKey} src="tombstoneWinOnce1.gif" alt="gif2" />}
+    </div>
+    </div>
+    
+      {/* <Modal show={modalShow} onHide={() => {setModalShow(false)}}>
         <Modal.Header closeButton>
           <Modal.Title>Selected Coin: {displayChoice}</Modal.Title>
         </Modal.Header>
@@ -214,7 +228,7 @@ export default function Home() {
           {showGif === 'wizzy1' && <img key={gifKey} src="wizzyWinOnce1.gif" alt="gif1" />}
           {showGif === 'tomb1' && <img key={gifKey} src="tombstoneWinOnce1.gif" alt="gif2" />}
         </Modal.Body>
-      </Modal>
+      </Modal> */}
     </div>
   );
 }
