@@ -9,7 +9,7 @@ export default function Home() {
   const [displayChoice, setChoice] = useState(null);
   const [gifKey, setGifKey] = useState(0);
   const [modalShow, setModalShow] = useState(false); // State for controlling the modal visibility
-  const [itemCount, setItemCount] = useState([15, 17]);
+  const [itemCount, setItemCount] = useState([50, 50]);
   const [itemQuantities, setItemQuantities] = useState([1, 1]); // Initial quantities for each item
   const [selectedIndexes, setSelectedIndexes] = useState([]);
   let imageLinks = ["/pixie_sword.png", "/deca_ring.png"]
